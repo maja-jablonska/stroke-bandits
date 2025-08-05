@@ -26,8 +26,25 @@ SEVEN_DAY_FORM = [
     'nontrial_thromb_days2to7',   # Non-trial thrombolysis between 24 hours & 7 days
     'nasogastric_days2to7',       # Nasogastric tube or percutaneous gastrostomy between 24 hours & 7 days
     'antibiotics_days2to7',       # Antibiotics between 24 hours & 7 days
-    'gcs_eye_7', 'gcs_verbal_7', 'gcs_motor_7',
-    'liftarms_7', 'ablewalk_7', 'indepinadl_7'
+    'findiag7',                  # Final diagnosis of initial randomising event (7 day form)
+    'brainsite7',                # Location of initial ischaemic stroke (7 day form)
+    'haem_type7',                # Type of initial haemorrhagic stroke (7 day form)
+    'med_adno',                  # Number of nights in Medical Admissions Unit in first 7 days
+    'critcareno',                # Number of nights in Critical Care Unit in first 7 days
+    'strk_unitno',               # Number of nights in Stroke Unit in first 7 days
+    'genwardno',                 # Number of nights in General Ward in first 7 days
+    'myocard_infarct',            # Myocardial infarction in first 7 days
+    'extracranial_bleed',         # Major extracranial bleed in first 7 days
+    'allergic_reaction',          # Major allergic reaction in first 7 days
+    'other_effect',               # Other possible side effect in first 7 days
+    'adverse_reaction',           # Other adverse reaction in first 7 days
+    'other_effect_code',          # D code for other side effects on 7 day form
+    'gcs_eye_7',
+    'gcs_verbal_7',
+    'gcs_motor_7',
+    'liftarms_7',
+    'ablewalk_7',
+    'indepinadl_7'
     ]
 
 SEVEN_DAY_FORM_FORMATS = {
@@ -58,6 +75,19 @@ SEVEN_DAY_FORM_FORMATS = {
     'nontrial_thromb_days2to7': 'YNDQ',
     'nasogastric_days2to7': 'YNDQ',
     'antibiotics_days2to7': 'YNDQ',
+    'findiag7': 'FINDIAG',
+    'brainsite7': 'BRAINSITE',
+    'haem_type7': 'HAEMTYPE',
+    'med_adno': float,
+    'critcareno': float,
+    'strk_unitno': float,
+    'genwardno': float,
+    'myocard_infarct': 'YNM',
+    'extracranial_bleed': 'YNM',
+    'allergic_reaction': 'YNM',
+    'other_effect': 'YNM',
+    'adverse_reaction': 'YNM',
+    'other_effect_code': str,
     'gcs_eye_7': 'GCSEYE',
     'gcs_verbal_7': 'GCSMOTOR',
     'gcs_motor_7': 'GCSVERBAL',

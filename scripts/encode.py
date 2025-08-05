@@ -26,6 +26,16 @@ def encode_yndq(df, col):
         0: 'Unknown'
     })
     
+
+def encode_ynm(df, col):
+    df[col] = df[col].map({
+        1: 1.0,
+        2: 0.0,
+        3: pd.NA
+    })
+    return df[col].astype('float')
+
+
 def encode_GCSEYE(df, col):
     return df[col].map({
         0: pd.NA,         # Missing
@@ -76,3 +86,27 @@ def encode_gender(df, col):
         1: 'Male',
         2: 'Female'
     })
+
+
+def encode_findiag(df, col):
+    return df[col].map({
+        1: 'Definite ischaemic stroke',
+        2: 'Definite or probable haemorrhagic stroke',
+        3: 'Non-stroke cause'
+    })
+    
+    
+def encode_brainsite(df, col):
+    return df[col].map({
+        1: 'Unknown',
+        2: 'Cerebral hemisphere',
+        3: 'Posterior circulation'
+    })
+    
+def encode_haemtype(df, col):
+    return df[col].map({
+        1: 'Primary intracranial haemorrhage',
+        2: 'Subdural haemorrhage',
+        3: 'Subarachnoid haemorrhage'
+    })
+    
