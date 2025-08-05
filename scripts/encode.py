@@ -16,14 +16,14 @@ def encode_yn(df, col):
 
 def encode_yndq(df, col):
     return df[col].map({
-        1: 1,
-        2: 0,
-        3: pd.NA,
-        4: pd.NA,
-        10: pd.NA,
-        20: pd.NA,
-        30: pd.NA,
-        0: pd.NA,
+        1: 'Yes',
+        2: 'No',
+        3: 'Unknown',
+        4: 'Unknown',
+        10: 'Deceased',
+        20: 'Unknown',
+        30: 'Unknown',
+        0: 'Unknown'
     })
     
 def encode_GCSEYE(df, col):
@@ -33,10 +33,10 @@ def encode_GCSEYE(df, col):
         2: 'To Pain',     # To Pain
         3: 'To command',  # To command
         4: 'Spontaneously', # Spontaneously
-        10: pd.NA,        # Died so question not relevant
-        20: pd.NA,        # Question not answered
-        30: pd.NA,        # Form not returned
-        40: pd.NA         # Question not asked
+        10: 'Deceased',     # Died so question not relevant
+        20: 'Unknown',      # Question not answered
+        30: 'Unknown',      # Form not returned
+        40: 'Unknown'       # Question not asked
     })
 
 
@@ -49,10 +49,10 @@ def encode_GCSMOTOR(df, col):
         4: 'Normal flex to pain',        # Normal flex to pain
         5: 'Localises movements to pain',# Localises movements to pain
         6: 'Normal',                     # Normal
-        10: pd.NA,                       # Died so question not relevant
-        20: pd.NA,                       # Question not answered
-        30: pd.NA,                       # Form not returned
-        40: pd.NA                        # Question not asked
+        10: 'Deceased',                  # Died so question not relevant
+        20: 'Unknown',                   # Question not answered
+        30: 'Unknown',                   # Form not returned
+        40: 'Unknown'                    # Question not asked
     })
     
     
@@ -64,10 +64,10 @@ def encode_GCSVERBAL(df, col):
         3: 'Inappropriate words',                   # Inappropriate words
         4: 'Confused in time, place or person',     # Confused in time, place or person
         5: 'Orientated in time, place and person',  # Orientated in time, place and person
-        10: pd.NA,                                  # Died so question not relevant
-        20: pd.NA,                                  # Question not answered
-        30: pd.NA,                                  # Form not returned
-        40: pd.NA                                   # Question not asked
+        10: 'Deceased',                             # Died so question not relevant
+        20: 'Unknown',                              # Question not answered
+        30: 'Unknown',                              # Form not returned
+        40: 'Unknown'                               # Question not asked
     })
     
 
