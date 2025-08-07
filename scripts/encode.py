@@ -3,17 +3,6 @@ import pandas as pd
 def encode_yn(df, col):
     return df[col].map({1: 1, 2: 0})
 
-    """YNDQ
-    1='Yes'
-    2='No'
-    3="Don't Know"
-    4= 'Cannot assess'
-    10='Died so question not relevant'
-    20='Question not answered'
-    30="Form not returned"
-    0="Question not asked";
-    """
-
 def encode_yndq(df, col):
     return df[col].map({
         1: 'Yes',
@@ -110,3 +99,55 @@ def encode_haemtype(df, col):
         3: 'Subarachnoid haemorrhage'
     })
     
+
+
+"""
+0='No'
+1='Possibly Yes'
+2='Definitely Yes'
+"""
+
+def encode_infarct(df, col):
+    return df[col].map({
+        0: 'No',
+        1: 'Possibly Yes',
+        2: 'Definitely Yes'
+    })
+
+"""
+1='TACI'
+2='PACI'
+3='LACI'
+4='POCI'
+5='OTHER'
+"""
+    
+def encode_stroketype(df, col):
+    return df[col].map({
+        1: 'TACI',
+        2: 'PACI',
+        3: 'LACI',
+        4: 'POCI',
+        5: 'Other'
+    })
+
+"""
+'E1'='Cerebrovascular'
+'E2'='Cancer'
+'E3'='Cardiovascular'
+'E4'='Infection'
+'E7'='Multiple Causes'
+'E8'='Other'
+'E9'='Unknown'
+"""
+
+def encode_deathcode(df, col):
+    return df[col].map({
+        'E1': 'Cerebrovascular',
+        'E2': 'Cancer',
+        'E3': 'Cardiovascular',
+        'E4': 'Infection',
+        'E7': 'Multiple Causes',
+        'E8': 'Other',
+        'E9': 'Unknown'
+    })
