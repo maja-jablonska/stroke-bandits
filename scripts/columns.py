@@ -5,9 +5,7 @@ GENERAL = [
 GENERAL_FORMATS = {
     'age': float,
     'itt_treat': bool,
-    'gender': 'gender',
-    'weight': float,
-    'glucose': float
+    'gender': 'gender'
 }
 
 RAND_FORM = [
@@ -69,7 +67,6 @@ RAND_FORM_FORMATS = {
     'stroketype': 'STROKETYPE',         # Stroke subtype STROKETYPE
     'pred_nihss': bool,                 # NIHSS predicted? Y01N
     'konprob': float,                   # Probability of good outcome based on Konig model
-    'randvioltype': str,                # Protocol deviation at randomisation
 }
 
 
