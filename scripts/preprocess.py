@@ -1,6 +1,11 @@
+from typing import Dict, List
 import pandas as pd
 import click
 import os
+
+from scripts.encode import (encode_brainsite, encode_deathcode, encode_findiag, encode_gender, encode_haemtype, encode_infarct,
+                            encode_stroketype, encode_yn, encode_yndq, encode_GCSEYE,
+                            encode_GCSMOTOR, encode_GCSVERBAL)
 
 
 def one_hot_encode(df):
@@ -29,25 +34,52 @@ def standardize(df, column_name):
     return df_encoded
 
 
-def preprocess(df):
+def preprocess(df, columns: List[str], formats: Dict[str, str]):
     """
     Preprocess the input file.
 
     Args:
         df (pd.DataFrame): The dataframe to preprocess.
+        columns (List[str]): The columns to preprocess.
+        formats (Dict[str, str]): The formats of the columns.
 
     Returns:
         pd.DataFrame, pd.DataFrame: The preprocessed dataframe and the stats dataframe.
     """
-    df = convert_to_bool(df, 'deathcode')
     # You can add your preprocessing steps here, e.g.:
-    numeric_cols = df.select_dtypes(include=['number']).columns.difference(['deathcode', 'itt_treat']).tolist()
+    numeric_cols = [col for col in columns if formats[col] == float]
     
     # Get means and stds for numeric columns (excluding 'deathcode')
     stats_df = df[numeric_cols].agg(['mean', 'std']).transpose()
     
     for col in numeric_cols:
         df = standardize(df, col)
+        
+    for col in columns:
+        if formats[col] == 'YNDQ':
+            df[col] = encode_yndq(df, col)
+        elif formats[col] == 'gender':
+            df[col] = encode_gender(df, col)
+        elif formats[col] == 'deathcode':
+            df[col] = encode_deathcode(df, col)
+        elif formats[col] == 'STROKETYPE':
+            df[col] = encode_stroketype(df, col)
+        elif formats[col] == 'INFARCT':
+            df[col] = encode_infarct(df, col)
+        elif formats[col] == 'GCSEYE':
+            df[col] = encode_GCSEYE(df, col)
+        elif formats[col] == 'GCSMOTOR':
+            df[col] = encode_GCSMOTOR(df, col)
+        elif formats[col] == 'GCSVERBAL':
+            df[col] = encode_GCSVERBAL(df, col)
+        elif formats[col] == 'Y01N':
+            df[col] = encode_yn(df, col)
+        elif formats[col] == 'findiag':
+            df[col] = encode_findiag(df, col)
+        elif formats[col] == 'brainsite':
+            df[col] = encode_brainsite(df, col)
+        elif formats[col] == 'haemtype':
+            df[col] = encode_haemtype(df, col)
 
     df = one_hot_encode(df)
 

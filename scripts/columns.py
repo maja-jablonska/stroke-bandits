@@ -1,3 +1,78 @@
+GENERAL = [
+    'age', 'itt_treat', 'gender', 'weight', 'glucose'
+]
+
+GENERAL_FORMATS = {
+    'age': float,
+    'itt_treat': bool,
+    'gender': 'gender',
+    'weight': float,
+    'glucose': float
+}
+
+RAND_FORM = [
+    'livealone_rand',         # Lived alone before stroke? YNDQ
+    'indepinadl_rand',        # Independent in ADL before stroke? YNDQ
+    'infarct',                # Recent ischaemic change likely cause of this stroke? INFARCT
+    'antiplat_rand',          # Received antiplatelet drugs in last 48 hours? YNDQ
+    'atrialfib_rand',         # Patient in atrial fibrillation at randomisation? YNDQ
+    'sbprand',                # Systolic BP at randomisation (mm Hg)
+    'dbprand',                # Diastolic BP at randomisation (mm Hg)
+    'weight',                 # Estimated weight (kg)
+    'glucose',                # Blood glucose (mmol/L)
+    'gcs_eye_rand',           # Best eye response (Glasgow Coma Scale) at randomisation GCSEYE
+    'gcs_motor_rand',         # Best motor response (Glasgow Coma Scale) at randomisation GCSMOTOR
+    'gcs_verbal_rand',        # Best verbal response (Glasgow Coma Scale) at randomisation GCSVERBAL
+    'gcs_score_rand',         # Total Glasgow Coma Scale score at randomisation
+    'nihss',                  # Total NIH Stroke Score at randomisation
+    'liftarms_rand',          # Able to lift both arms off bed at randomisation YNDQ
+    'ablewalk_rand',          # Able to walk without help at randomisation YNDQ
+    'weakface_rand',          # Unilateral weakness affecting face at randomisation YNDQ
+    'weakarm_rand',           # Unilateral weakness affecting arm or hand at randomisation YNDQ
+    'weakleg_rand',           # Unilateral weakness affecting leg or foot at randomisation YNDQ
+    'dysphasia_rand',         # Dysphasia at randomisation YNDQ
+    'hemianopia_rand',        # Homonymous hemianopia at randomisation YNDQ
+    'visuospat_rand',         # Visuospatial disorder at randomisation YNDQ
+    'brainstemsigns_rand',    # Brainstem or cerebellar signs at randomisation YNDQ
+    'otherdeficit_rand',      # Other neurological deficit at randomisation YNDQ
+    'stroketype',             # Stroke subtype STROKETYPE
+    'pred_nihss',             # NIHSS predicted? Y01N
+    'konprob',                # Probability of good outcome based on Konig model
+]
+
+
+RAND_FORM_FORMATS = {
+    'livealone_rand': 'YNDQ',           # Lived alone before stroke? YNDQ
+    'indepinadl_rand': 'YNDQ',          # Independent in ADL before stroke? YNDQ
+    'infarct': 'INFARCT',               # Recent ischaemic change likely cause of this stroke? INFARCT
+    'antiplat_rand': 'YNDQ',            # Received antiplatelet drugs in last 48 hours? YNDQ
+    'atrialfib_rand': 'YNDQ',           # Patient in atrial fibrillation at randomisation? YNDQ
+    'sbprand': float,                   # Systolic BP at randomisation (mm Hg)
+    'dbprand': float,                   # Diastolic BP at randomisation (mm Hg)
+    'weight': float,                    # Estimated weight (kg)
+    'glucose': float,                   # Blood glucose (mmol/L)
+    'gcs_eye_rand': 'GCSEYE',           # Best eye response (Glasgow Coma Scale) at randomisation GCSEYE
+    'gcs_motor_rand': 'GCSMOTOR',       # Best motor response (Glasgow Coma Scale) at randomisation GCSMOTOR
+    'gcs_verbal_rand': 'GCSVERBAL',     # Best verbal response (Glasgow Coma Scale) at randomisation GCSVERBAL
+    'gcs_score_rand': float,            # Total Glasgow Coma Scale score at randomisation
+    'nihss': float,                     # Total NIH Stroke Score at randomisation
+    'liftarms_rand': 'YNDQ',            # Able to lift both arms off bed at randomisation YNDQ
+    'ablewalk_rand': 'YNDQ',            # Able to walk without help at randomisation YNDQ
+    'weakface_rand': 'YNDQ',            # Unilateral weakness affecting face at randomisation YNDQ
+    'weakarm_rand': 'YNDQ',             # Unilateral weakness affecting arm or hand at randomisation YNDQ
+    'weakleg_rand': 'YNDQ',             # Unilateral weakness affecting leg or foot at randomisation YNDQ
+    'dysphasia_rand': 'YNDQ',           # Dysphasia at randomisation YNDQ
+    'hemianopia_rand': 'YNDQ',          # Homonymous hemianopia at randomisation YNDQ
+    'visuospat_rand': 'YNDQ',           # Visuospatial disorder at randomisation YNDQ
+    'brainstemsigns_rand': 'YNDQ',      # Brainstem or cerebellar signs at randomisation YNDQ
+    'otherdeficit_rand': 'YNDQ',        # Other neurological deficit at randomisation YNDQ
+    'stroketype': 'STROKETYPE',         # Stroke subtype STROKETYPE
+    'pred_nihss': bool,                 # NIHSS predicted? Y01N
+    'konprob': float,                   # Probability of good outcome based on Konig model
+    'randvioltype': str,                # Protocol deviation at randomisation
+}
+
+
 SEVEN_DAY_FORM = [
     'aspirin_pre',                # Aspirin before admission
     'dipyridamole_pre',           # Dipyridamole before admission
