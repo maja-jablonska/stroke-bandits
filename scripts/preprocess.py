@@ -41,7 +41,7 @@ def preprocess(df):
     """
     df = convert_to_bool(df, 'deathcode')
     # You can add your preprocessing steps here, e.g.:
-    numeric_cols = df.select_dtypes(include=['number']).columns.difference(['deathcode']).tolist()
+    numeric_cols = df.select_dtypes(include=['number']).columns.difference(['deathcode', 'itt_treat']).tolist()
     
     # Get means and stds for numeric columns (excluding 'deathcode')
     stats_df = df[numeric_cols].agg(['mean', 'std']).transpose()
