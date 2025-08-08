@@ -43,31 +43,39 @@ class NeuralUCB:
     def select(self, context):
         """Return arm (0/1) using UCB."""
         x = torch.tensor(context, dtype=torch.float32, device=self.device)
-        phi = self.net(x).view(1, -1, 1)      # shape (1,d,1)
+        phi = self.net(x).view(-1, 1)      # shape (d,1)
         ucbs = []
         for a in (0, 1):
             theta = self.A_inv[a] @ self.b[a]            # d×1
-            mu = (phi @ theta).item()                    # scalar
-            var = (phi @ self.A_inv[a] @ phi.transpose(1,2)).item()
+            mu = (phi.T @ theta).item()                  # scalar
+            var = (phi.T @ self.A_inv[a] @ phi).item()
             ucbs.append(mu + self.alpha * np.sqrt(var))
-        return int(np.argmax(ucbs)), phi.squeeze(0)      # returns chosen arm and φ(x)
+        return int(np.argmax(ucbs)), phi                 # returns chosen arm and φ(x)
 
     def update(self, arm, phi, reward):
         """One online update: ridge posterior + SGD on the feature net."""
         # 1. update linear posterior for chosen arm
-        phi = phi.detach().view(-1,1)                    # d×1
-        self.A[arm] += phi @ phi.T
+        phi_np = phi.detach().view(-1,1)                    # d×1, no grad for linear update
+        self.A[arm] += phi_np @ phi_np.T
         self.A_inv[arm] = torch.inverse(self.A[arm])
-        self.b[arm] += reward * phi
+        self.b[arm] += reward * phi_np
 
         # 2. one gradient step on the feature extractor w.r.t. squared loss
         self.optimizer.zero_grad()
-        # Predict through *all* arms for stability (can also just use chosen arm)
+        # Forward pass through feature extractor with grad enabled
+        phi_for_grad = phi.view(-1, 1).clone().detach().requires_grad_(True)
+        # Recompute features from context if possible, else pass phi through net again
+        # (Assume phi was output of net(x), so we need to recompute for grad)
+        # If you have the original context x, you should use: phi_for_grad = self.net(x).view(-1,1)
         preds = []
         for a in (0,1):
             theta = self.A_inv[a] @ self.b[a]
-            preds.append((phi.T @ theta).squeeze())      # detach phi? keep end-to-end
+            preds.append((phi_for_grad.T @ theta).squeeze())
         y_hat = torch.stack(preds)                       # shape (2,)
         loss = ((y_hat[arm] - reward) ** 2)
         loss.backward()
+        # Update only the feature extractor parameters
+        for param in self.net.parameters():
+            if param.grad is not None:
+                param.grad = param.grad.clone()
         self.optimizer.step()
