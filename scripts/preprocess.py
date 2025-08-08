@@ -47,8 +47,11 @@ def preprocess(df, columns: List[str], formats: Dict[str, str]):
     Returns:
         pd.DataFrame, pd.DataFrame: The preprocessed dataframe and the stats dataframe.
     """
+    df = df.copy()
+    df = df[columns]
+
     # You can add your preprocessing steps here, e.g.:
-    numeric_cols = [col for col in columns if formats[col] == float]
+    numeric_cols = [col for col in columns if (formats[col] == 'float64')|(formats[col] == float)]
     
     # KNN Imputation for all columns
     imputer = KNNImputer(n_neighbors=5)
