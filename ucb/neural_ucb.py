@@ -52,30 +52,26 @@ class NeuralUCB:
             ucbs.append(mu + self.alpha * np.sqrt(var))
         return int(np.argmax(ucbs)), phi                 # returns chosen arm and φ(x)
 
-    def update(self, arm, phi, reward):
+    def update(self, context, arm, phi, reward):
         """One online update: ridge posterior + SGD on the feature net."""
         # 1. update linear posterior for chosen arm
-        phi_np = phi.detach().view(-1,1)                    # d×1, no grad for linear update
-        self.A[arm] += phi_np @ phi_np.T
-        self.A_inv[arm] = torch.inverse(self.A[arm])
-        self.b[arm] += reward * phi_np
+        with torch.no_grad():
+            phi_detached = phi.view(-1,1)
+            self.A[arm] += phi_detached @ phi_detached.T
+            self.A_inv[arm] = torch.inverse(self.A[arm])
+            self.b[arm] += reward * phi_detached
 
         # 2. one gradient step on the feature extractor w.r.t. squared loss
         self.optimizer.zero_grad()
-        # Forward pass through feature extractor with grad enabled
-        phi_for_grad = phi.view(-1, 1).clone().detach().requires_grad_(True)
-        # Recompute features from context if possible, else pass phi through net again
-        # (Assume phi was output of net(x), so we need to recompute for grad)
-        # If you have the original context x, you should use: phi_for_grad = self.net(x).view(-1,1)
+        # Re-compute phi with gradients enabled
+        phi_for_grad = self.net(torch.tensor(context, dtype=torch.float32, device=self.device)).view(-1, 1)
+        
         preds = []
         for a in (0,1):
-            theta = self.A_inv[a] @ self.b[a]
+            with torch.no_grad():
+                theta = self.A_inv[a] @ self.b[a]
             preds.append((phi_for_grad.T @ theta).squeeze())
         y_hat = torch.stack(preds)                       # shape (2,)
         loss = ((y_hat[arm] - reward) ** 2)
         loss.backward()
-        # Update only the feature extractor parameters
-        for param in self.net.parameters():
-            if param.grad is not None:
-                param.grad = param.grad.clone()
         self.optimizer.step()
