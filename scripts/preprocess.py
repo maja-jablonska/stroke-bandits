@@ -2,6 +2,7 @@ from typing import Dict, List
 import pandas as pd
 import click
 import os
+from sklearn.impute import KNNImputer
 
 from scripts.encode import (encode_brainsite, encode_deathcode, encode_findiag, encode_gender, encode_haemtype, encode_infarct,
                             encode_stroketype, encode_yn, encode_yndq, encode_GCSEYE,
@@ -49,6 +50,12 @@ def preprocess(df, columns: List[str], formats: Dict[str, str]):
     # You can add your preprocessing steps here, e.g.:
     numeric_cols = [col for col in columns if formats[col] == float]
     
+    # KNN Imputation for all columns
+    imputer = KNNImputer(n_neighbors=5)
+    df_imputed = imputer.fit_transform(df[columns])
+    df = pd.DataFrame(df_imputed, columns=df.columns)
+
+
     # Get means and stds for numeric columns (excluding 'deathcode')
     stats_df = df[numeric_cols].agg(['mean', 'std']).transpose()
     
@@ -84,3 +91,19 @@ def preprocess(df, columns: List[str], formats: Dict[str, str]):
     df = one_hot_encode(df)
 
     return df, stats_df
+
+
+@click.command()
+@click.option('--input-file', help='The input file to preprocess.')
+@click.option('--output-file', help='The output file to save the preprocessed data to.')
+def main(input_file, output_file):
+    """
+    Main function to preprocess the data.
+    """
+    df = pd.read_csv(input_file)
+    df = preprocess(df)
+    df.to_csv(output_file, index=False)
+
+
+if __name__ == '__main__':
+    main()
