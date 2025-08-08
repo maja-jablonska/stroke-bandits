@@ -2,6 +2,7 @@ import numpy as np
 from numpy.linalg import inv
 from numpy import sqrt
 from numpy import argmax
+import torch
 
 class LinUCB:
     """
@@ -20,9 +21,9 @@ class LinUCB:
     def initialize_action(self, action):
         """Initialize parameters for a new action"""
         if action not in self.A:
-            self.A[action] = self.lambda_reg * np.eye(self.dim)
-            self.b[action] = np.zeros(self.dim)
-            self.theta[action] = np.zeros(self.dim)
+            self.A[action] = self.lambda_reg * torch.tensor(np.eye(self.dim))
+            self.b[action] = torch.tensor(np.zeros(self.dim))
+            self.theta[action] = torch.tensor(np.zeros(self.dim))
     
     def select_action(self, context, possible_actions):
         ucb_scores = {}
@@ -31,7 +32,7 @@ class LinUCB:
             self.initialize_action(action)
             
             # Compute UCB score
-            A_inv = np.linalg.inv(self.A[action])
+            A_inv = torch.linalg.inv(self.A[action])
             theta = A_inv @ self.b[action]
             
             # Mean prediction
@@ -39,7 +40,7 @@ class LinUCB:
             
             # Confidence bound (exploration bonus)
             variance = context @ A_inv @ context
-            std = np.sqrt(variance)
+            std = torch.sqrt(variance)
             
             # UCB = exploitation + exploration
             ucb_scores[action] = mean + self.alpha * std
@@ -53,11 +54,19 @@ class LinUCB:
         """
         # Ensure action is initialized
         self.initialize_action(action)
-        
+
+        # Make sure context and reward are 1D and scalar, respectively
+        if reward.dim() > 0:
+            reward = reward.squeeze()
+        if context.dim() > 1:
+            context = context.squeeze()
+
         # Update sufficient statistics
-        self.A[action] += np.outer(context, context)
-        self.b[action] += context * reward
-        
+        self.A[action] += torch.outer(context, context)
+        # Remove debug print or adjust if needed
+        # print(context.shape, reward.shape)
+        self.b[action] += context * reward.item() if isinstance(reward, torch.Tensor) else context * reward
+
         # Update model parameters (could be lazy/cached)
-        A_inv = np.linalg.inv(self.A[action])
+        A_inv = torch.linalg.inv(self.A[action])
         self.theta[action] = A_inv @ self.b[action]
